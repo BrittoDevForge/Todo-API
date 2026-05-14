@@ -5,6 +5,10 @@ import com.brittodev.todoapi.entity.Todo;
 import com.brittodev.todoapi.service.TodoService;
 import jakarta.persistence.GeneratedValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +76,23 @@ public class TodoController {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(todoService.getAllTodo());
+    }
+
+
+    @GetMapping("/page")
+    ResponseEntity<Page<Todo>> getWithPage(
+            @RequestParam(defaultValue = "0")
+            int page ,
+            @RequestParam(defaultValue = "5")
+            int size ,
+            @RequestParam(defaultValue = "id")
+            String sortBy ,
+            @RequestParam(defaultValue = "asc")
+            String  direction
+    ) {
+        Sort sort = (direction.equals("desc")) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page,size,sort);
+        return new ResponseEntity<>(todoService.getTodo(pageable),HttpStatus.OK);
     }
 
 }
