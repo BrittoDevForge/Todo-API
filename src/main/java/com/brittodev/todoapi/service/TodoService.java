@@ -28,6 +28,9 @@ public class TodoService {
 
     // update the todo
     public Todo updateTodo(Todo todo) {
+        if(todo.getId() == null) {
+            throw new RuntimeException("please provide the todo id");
+        }
         Todo existing = todoRepository.findById(todo.getId()).orElseThrow(() -> new RuntimeException("todo not found"));
 
         existing.setIsCompleted(todo.getIsCompleted());
@@ -39,6 +42,9 @@ public class TodoService {
 
     // delete the todo by id
     public void deleteTodo(Long id) {
+        if(id == null) {
+            throw new RuntimeException("provide todo id");
+        }
         if(!todoRepository.existsById(id)) {
             throw new RuntimeException("Todo not found for id " + id);
         }
@@ -47,15 +53,14 @@ public class TodoService {
 
     // delete all todo
     public void deleteAllTodo() {
-        try {
             todoRepository.deleteAll();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
     }
 
     // get todo by id
     public Todo getTodo(Long id) {
+        if (id == null) {
+            throw new RuntimeException("provide todo id");
+        }
         return todoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Todo not found"));
     }
@@ -66,8 +71,19 @@ public class TodoService {
     }
 
     // pagination
-    public Page<Todo> getTodo(Pageable pageable) {
+    public Page<Todo> getTodos(Pageable pageable) {
         return todoRepository.findAll(pageable);
+    }
+
+    // search
+    public Page<Todo> getByTitle(String title , Pageable pageable) {
+        return todoRepository.findTodoByTitleContains(title,pageable);
+    }
+    public Page<Todo> getByTitleAndCompletion(String title , Boolean isCompleted , Pageable pageable) {
+        return todoRepository.findTodoByTitleContainsAndIsCompleted(title,isCompleted,pageable);
+    }
+    public Page<Todo> getByCompletion(Boolean isCompleted , Pageable pageable) {
+        return todoRepository.findTodoByIsCompleted(isCompleted,pageable);
     }
 
 

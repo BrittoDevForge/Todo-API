@@ -4,11 +4,9 @@ package com.brittodev.todoapi.controller;
 import com.brittodev.todoapi.entity.Todo;
 import com.brittodev.todoapi.service.TodoService;
 import jakarta.persistence.GeneratedValue;
+import org.apache.tomcat.util.http.parser.Host;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -74,7 +72,7 @@ public class TodoController {
     @GetMapping("/getAll")
     ResponseEntity<List<Todo>> getAllTodo() {
             return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
+                    .status(HttpStatus.OK)
                     .body(todoService.getAllTodo());
     }
 
@@ -92,7 +90,48 @@ public class TodoController {
     ) {
         Sort sort = (direction.equals("desc")) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page,size,sort);
-        return new ResponseEntity<>(todoService.getTodo(pageable),HttpStatus.OK);
+        return new ResponseEntity<>(todoService.getTodos(pageable),HttpStatus.OK);
+    }
+
+    // search
+    @GetMapping("/search")
+    ResponseEntity<Page<Todo>> search(
+            @RequestParam(defaultValue = "0")
+            int page ,
+            @RequestParam(defaultValue = "5")
+            int size ,
+            @RequestParam(defaultValue = "id")
+            String sortBy ,
+            @RequestParam(defaultValue = "asc")
+            String direction ,
+            @RequestParam(required = false)
+            String title ,
+            @RequestParam(required = false)
+            Boolean isCompleted
+    ) {
+        Sort sort = (direction.equals("desc")) ?
+                Sort.by(sortBy).descending() :
+                Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page,size,sort);
+
+        if(title != null && isCompleted != null) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(todoService.getByTitleAndCompletion(title, isCompleted,pageable));
+        } else if (title != null) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(todoService.getByTitle(title,pageable));
+        } else if (isCompleted!=null) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(todoService.getByCompletion(isCompleted,pageable));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(todoService.getTodos(pageable));
+        }
     }
 
 }

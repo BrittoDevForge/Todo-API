@@ -8,7 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TodoRepository extends JpaRepository<Todo,Long> {
 
-    Page<Todo> findAll(@NonNull Pageable pageable);
+
+    Page<Todo> findTodoByTitleContains(String title,Pageable pageable);
+
+    Page<Todo> findTodoByIsCompleted(Boolean isCompleted, Pageable pageable);
+
+    Page<Todo> findTodoByTitleContainsAndIsCompleted(String title, Boolean isCompleted, Pageable pageable);
+
 
 
 }
