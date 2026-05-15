@@ -7,6 +7,7 @@ import com.brittodev.todoapi.dto.responseDto.TodoResponseDto;
 import com.brittodev.todoapi.entity.Todo;
 import com.brittodev.todoapi.service.TodoService;
 import jakarta.persistence.GeneratedValue;
+import jakarta.validation.Valid;
 import org.apache.tomcat.util.http.parser.Host;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -27,7 +28,7 @@ public class TodoController {
 
     // create the todo
     @PostMapping("/create")
-    ResponseEntity<TodoResponseDto> createTodo(@RequestBody TodoCreateDto dto) {
+    ResponseEntity<TodoResponseDto> createTodo(@Valid @RequestBody TodoCreateDto dto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(todoService.createTodo(dto));
@@ -35,7 +36,7 @@ public class TodoController {
 
     // update the todo
     @PutMapping("/update")
-    ResponseEntity<TodoResponseDto> updateTodo(@RequestBody TodoUpdateDto dto) {
+    ResponseEntity<TodoResponseDto> updateTodo(@Valid @RequestBody TodoUpdateDto dto) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(todoService.updateTodo(dto));

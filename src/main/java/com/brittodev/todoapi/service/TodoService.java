@@ -6,6 +6,7 @@ import com.brittodev.todoapi.dto.requestDto.TodoCreateDto;
 import com.brittodev.todoapi.dto.requestDto.TodoUpdateDto;
 import com.brittodev.todoapi.dto.responseDto.TodoResponseDto;
 import com.brittodev.todoapi.entity.Todo;
+import com.brittodev.todoapi.exception.custom.ResourceNotFoundException;
 import com.brittodev.todoapi.repository.TodoRepository;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public class TodoService {
             throw new RuntimeException("provide todo id");
         }
         Todo todo =  todoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Todo not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Todo not found for that id " + id));
         return getResponseDto(todo);
     }
 
@@ -104,8 +105,6 @@ public class TodoService {
                 .description(dto.getDescription())
                 .build();
     }
-
-
 
     public TodoResponseDto getResponseDto(Todo todo) {
         return TodoResponseDto.builder()

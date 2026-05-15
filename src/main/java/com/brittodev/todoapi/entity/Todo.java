@@ -17,24 +17,24 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Builder
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Todo {
 
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
 
-    String title;
-    String description;
+    private String title;
+    private String description;
     @Builder.Default
-    Boolean isCompleted = false;
+    private Boolean isCompleted = false;
 
     @CreatedDate
     @Column(updatable = false,nullable = false)
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    LocalDateTime modifiedAt;
+    private LocalDateTime modifiedAt;
 }
