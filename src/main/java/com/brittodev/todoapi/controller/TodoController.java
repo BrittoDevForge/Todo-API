@@ -1,6 +1,9 @@
 package com.brittodev.todoapi.controller;
 
 
+import com.brittodev.todoapi.dto.requestDto.TodoCreateDto;
+import com.brittodev.todoapi.dto.requestDto.TodoUpdateDto;
+import com.brittodev.todoapi.dto.responseDto.TodoResponseDto;
 import com.brittodev.todoapi.entity.Todo;
 import com.brittodev.todoapi.service.TodoService;
 import jakarta.persistence.GeneratedValue;
@@ -24,18 +27,18 @@ public class TodoController {
 
     // create the todo
     @PostMapping("/create")
-    ResponseEntity<Todo> createTodo(@RequestBody Todo todo) {
+    ResponseEntity<TodoResponseDto> createTodo(@RequestBody TodoCreateDto dto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(todoService.createTodo(todo));
+                .body(todoService.createTodo(dto));
     }
 
     // update the todo
     @PutMapping("/update")
-    ResponseEntity<Todo> updateTodo(@RequestBody Todo todo) {
+    ResponseEntity<TodoResponseDto> updateTodo(@RequestBody TodoUpdateDto dto) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(todoService.updateTodo(todo));
+                .body(todoService.updateTodo(dto));
     }
 
     // delete todo by id
@@ -62,7 +65,7 @@ public class TodoController {
 
     // get todo
     @GetMapping("/get")
-    ResponseEntity<Todo> getTodo(@RequestParam Long id) {
+    ResponseEntity<TodoResponseDto> getTodo(@RequestParam Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(todoService.getTodo(id));
@@ -70,7 +73,7 @@ public class TodoController {
 
     // getAllTodo
     @GetMapping("/getAll")
-    ResponseEntity<List<Todo>> getAllTodo() {
+    ResponseEntity<List<TodoResponseDto>> getAllTodo() {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(todoService.getAllTodo());
@@ -78,7 +81,7 @@ public class TodoController {
 
 
     @GetMapping("/page")
-    ResponseEntity<Page<Todo>> getWithPage(
+    ResponseEntity<Page<TodoResponseDto>> getWithPage(
             @RequestParam(defaultValue = "0")
             int page ,
             @RequestParam(defaultValue = "5")
@@ -95,7 +98,7 @@ public class TodoController {
 
     // search
     @GetMapping("/search")
-    ResponseEntity<Page<Todo>> search(
+    ResponseEntity<Page<TodoResponseDto>> search(
             @RequestParam(defaultValue = "0")
             int page ,
             @RequestParam(defaultValue = "5")

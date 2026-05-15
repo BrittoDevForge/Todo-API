@@ -2,7 +2,10 @@ package com.brittodev.todoapi.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,7 +16,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Builder
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Todo {
 
     @Id
@@ -22,6 +28,7 @@ public class Todo {
 
     String title;
     String description;
+    @Builder.Default
     Boolean isCompleted = false;
 
     @CreatedDate
