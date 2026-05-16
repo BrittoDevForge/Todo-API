@@ -28,10 +28,16 @@ public class TodoController {
 
     // create the todo
     @PostMapping("/create")
-    ResponseEntity<TodoResponseDto> createTodo(@Valid @RequestBody TodoCreateDto dto) {
+    ResponseEntity<TodoResponseDto> createTodo(
+            @Valid
+            @RequestBody
+            TodoCreateDto dto ,
+            @RequestParam
+            String email
+    ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(todoService.createTodo(dto));
+                .body(todoService.createTodo(email,dto));
     }
 
     // update the todo
@@ -78,6 +84,12 @@ public class TodoController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(todoService.getAllTodo());
+    }
+    @GetMapping("/getAllByUser")
+    ResponseEntity<List<TodoResponseDto>> getAllTodoByUser(@RequestParam String email) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(todoService.getAllTodoByUser(email));
     }
 
 

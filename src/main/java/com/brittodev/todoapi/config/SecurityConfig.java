@@ -23,11 +23,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/api/auth/**","/h2-console/**")
+                                .requestMatchers("/api/auth/**","/h2-console/**",
+                                        "/api/todo/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
-                );
+                )
+                .headers(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
 
     }

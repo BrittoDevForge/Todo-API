@@ -37,4 +37,8 @@ public class Todo {
 
     @LastModifiedDate
     private LocalDateTime modifiedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
 }

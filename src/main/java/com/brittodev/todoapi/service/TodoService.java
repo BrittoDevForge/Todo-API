@@ -6,8 +6,10 @@ import com.brittodev.todoapi.dto.requestDto.TodoCreateDto;
 import com.brittodev.todoapi.dto.requestDto.TodoUpdateDto;
 import com.brittodev.todoapi.dto.responseDto.TodoResponseDto;
 import com.brittodev.todoapi.entity.Todo;
+import com.brittodev.todoapi.entity.User;
 import com.brittodev.todoapi.exception.custom.ResourceNotFoundException;
 import com.brittodev.todoapi.repository.TodoRepository;
+import com.brittodev.todoapi.repository.UserRepository;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,10 +26,16 @@ public class TodoService {
 
     @Autowired
     TodoRepository todoRepository;
+    @Autowired
+    UserRepository userRepository;
+
 
     // creating the todo
-    public TodoResponseDto createTodo(TodoCreateDto dto) {
-        return getResponseDto(todoRepository.save(createTodoFromDto(dto)));
+    public TodoResponseDto createTodo(String email ,TodoCreateDto dto) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("user is not found")
+        );
+        return getResponseDto(todoRepository.save(createTodoFromDto(dto,user)));
     }
 
     // update the todo
@@ -75,6 +83,14 @@ public class TodoService {
         return getResponseDtos(todoRepository.findAll());
     }
 
+    // get All todo by user
+    public List<TodoResponseDto> getAllTodoByUser(String email) {
+        if(!userRepository.existsByEmail(email)) {
+            throw new ResourceNotFoundException("user not found for that " + email);
+        }
+        return getResponseDtos(todoRepository.findByUserEmail(email));
+    }
+
     // pagination
     public Page<TodoResponseDto> getTodos(Pageable pageable) {
         return todoRepository.findAll(pageable)
@@ -99,10 +115,11 @@ public class TodoService {
 
 
     // helper for Dto Creation
-    public Todo createTodoFromDto(TodoCreateDto dto) {
+    public Todo createTodoFromDto(TodoCreateDto dto , User user) {
         return Todo.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())
+                .user(user)
                 .build();
     }
 
