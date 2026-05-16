@@ -2,9 +2,10 @@ package com.brittodev.todoapi.dto.responseDto;
 
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
 @Builder
 public class TodoResponseDto {
     private Long id;

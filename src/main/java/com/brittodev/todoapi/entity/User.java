@@ -2,16 +2,14 @@ package com.brittodev.todoapi.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Table(name = "users")
-@Data
+@Table(name = "users_table")
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

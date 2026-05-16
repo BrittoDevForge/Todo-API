@@ -10,7 +10,6 @@ import lombok.Getter;
 import org.springframework.scheduling.support.SimpleTriggerContext;
 
 @Getter
-@AllArgsConstructor
 public class RegisterRequest {
     private String userName;
     @Email

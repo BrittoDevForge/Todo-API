@@ -3,15 +3,9 @@ package com.brittodev.todoapi.dto.requestDto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 public class TodoCreateDto {
     @NotBlank(message = "title should not be empty")
     private String title;

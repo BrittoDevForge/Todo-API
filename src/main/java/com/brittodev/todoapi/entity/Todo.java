@@ -2,10 +2,7 @@ package com.brittodev.todoapi.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,10 +12,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Table(name = "todo_table")
+@Getter
+@Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Todo {
 
